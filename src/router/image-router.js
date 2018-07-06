@@ -37,19 +37,33 @@ imageRouter.post('/api/images', bearerAuthMiddleware, multerUpload.any(), (reque
 });
 
 imageRouter.get('/api/images/:id?', bearerAuthMiddleware, (request, response, next) => {
-  if (!request.account) return next(new HttpErrors(401), 'IMAGE ROUTER GET: invalid request');
+  if (!request.account) return next(new HttpErrors(401, 'IMAGE ROUTER GET: invalid request'));
   if (!request.params.id) return next(new HttpErrors(400, 'IMAGE ROUTER GET: no id provided'));
 
   return Image.findById(request.params.id)
     .then((image) => {
       if (!image) return next(new HttpErrors(404, 'IMAGE ROUTER GET: no image found'));
       logger.log(logger.INFO, `IMAGE ROUTER GET: successfully found image ${JSON.stringify(image, null, 2)}`);
+      console.log(image._id, 'IMAGE ID!!!!!!!!!!!!!!!!!!!!!!');
       return response.json(image);
     })
     .catch(next);
 });
 
 // TODO: write a imageRouter.delete here
+imageRouter.delete('/api/images/:id?', bearerAuthMiddleware, (request, response, next) => {
+  if (!request.account) return next(new HttpErrors(401), 'IMAGE ROUTER DELETE: invalid request');
+  if (!request.params.id) return next(new HttpErrors(400, 'IMAGE ROUTER DELETE: no id provided'));
+  return Image.findById(request.params.id)
+    .then((image) => {
+      if (!image) return next(new HttpErrors(404, 'IMAGE ROUTER DELETE: IMAGE image not found in database'));
+      const key = image.fileName;
+      return s3Remove(key);
+    })
+    .then((result) => {
+      return response.json(result);
+    })    
+    .catch(next);
+});
 
 export default imageRouter;
-

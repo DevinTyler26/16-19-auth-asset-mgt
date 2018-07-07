@@ -13,7 +13,7 @@
       },
       {
         "duration": 10,
-        "arrivalRate": 100
+        "arrivalRate": 1000
       }
     ],
     "processor" : "./load-test-create-user.js"

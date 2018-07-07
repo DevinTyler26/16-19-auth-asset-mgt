@@ -65,3 +65,26 @@ Add your Travis badge to the top of your README. List all of your registered rou
 ## Documentation
 - /signup POST will make a user account with the given username, email, and password. This will store this information in a db with the password turned into a hashed password
 - /login GET will allow a pre-existing user to log bac into their account
+
+## Load Testing Analysis
+
+### Heroku App
+- I sent 10060 users to my heroku app
+- Received 5585 404 errors
+
+| Error        | Amount           | 
+| ------------- |:-------------:| 
+| ECONNRESET     | 1253 |
+| ETIMEDOUT      | 84      |
+| ESOCKETTIMEDOUT | 3138      |
+
+### localhost:3000
+
+- I sent 10060 users to my heroku app
+- Received 5585 404 errors
+
+| Error        | Amount           | 
+| ------------- |:-------------:| 
+| ECONNREFUSED     | 10612 |
+| EADDRNOTAVAIL      | 9853      |
+| ETIMEDOUT | 19555      |
